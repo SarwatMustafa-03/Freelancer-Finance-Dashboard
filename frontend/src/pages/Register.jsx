@@ -12,7 +12,7 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      await API.post("/auth/register", form);
+      await API.post("/auth/register", form);//req backend ko bhjty
 
       alert("Registered Successfully");
 
@@ -24,13 +24,13 @@ const Register = () => {
 
   return (
     <form className="auth-form" onSubmit={handleSubmit}>
-      <h2>Register</h2>
+      <h1>Register</h1>
 
       <input
         type="text"
         placeholder="Name"
         onChange={(e) =>
-          setForm({ ...form, name: e.target.value })
+          setForm({ ...form, name: e.target.value })//values save krta =>1
         }
       />
 
