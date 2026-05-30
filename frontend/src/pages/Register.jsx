@@ -18,8 +18,9 @@ const Register = () => {
 
       window.location.href = "/login";
     } catch (error) {
-      console.log(error.response.data);
-    }
+  console.log("Error:", error?.response?.data || error.message);
+  alert(error?.response?.data?.error || "Something went wrong");
+}
   };
 
   return (

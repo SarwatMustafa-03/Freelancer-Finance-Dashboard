@@ -1,6 +1,6 @@
 const User=require("../models/user.model")
 const bcrypt=require("bcrypt")
-
+const jwt = require("jsonwebtoken");
 //register
 const register=async(req,res)=>{
     try {
