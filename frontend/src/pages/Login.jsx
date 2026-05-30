@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "../api/axios";
 
 const Login = () => {
-
+console.log("Login component rendered");
     const [formData, setFormData] = useState({
         email: "",
         password: ""
