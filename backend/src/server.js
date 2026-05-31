@@ -17,7 +17,11 @@ app.use(express.json());
 
 // routes
 const authRoutes = require("./routes/auth.routes");
+const transactionRoutes = require("./routes/transaction.routes");
+//auth
 app.use("/api/auth", authRoutes);
+//transaction
+app.use("/api/transactions", transactionRoutes);
 
 app.get("/", (req, res) => {
     res.send("API running...");
