@@ -8,13 +8,11 @@ const app = express();
 // database
 const connectDB = require("./config/db.config");
 
-// middlewares
+// middleware
 app.use(cors({
-    origin: "http://localhost:5175",
+    origin: true,
     credentials: true
 }));
-
-
 app.use(express.json());
 
 // routes
