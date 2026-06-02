@@ -92,6 +92,31 @@ const deleteTransaction = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+//getsummary
+const getSummary = async (req, res) => {
+  try {
+    const transactions = await Transaction.find({
+      userId: req.user.id,
+    });
+
+    const income = transactions
+      .filter((t) => t.type === "income")
+      .reduce((acc, curr) => acc + curr.amount, 0);
+
+    const expense = transactions
+      .filter((t) => t.type === "expense")
+      .reduce((acc, curr) => acc + curr.amount, 0);
+
+    res.json({
+      income,
+      expense,
+      balance: income - expense,
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 module.exports = {
   createTransaction,
@@ -99,4 +124,5 @@ module.exports = {
   getById,
   updateTransaction,
   deleteTransaction,
+  getSummary
 };

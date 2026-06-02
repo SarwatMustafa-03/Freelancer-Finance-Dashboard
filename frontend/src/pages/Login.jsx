@@ -1,80 +1,32 @@
 import { useState } from "react";
-import axios from "../api/axios";
+import API from "../api/axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-console.log("Login component rendered");
+  const [form, setForm] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({
-        email: "",
-        password: ""
-    });
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await API.post("/auth/login", form);
+      localStorage.setItem("token", data.token); // Token save karna zaroori hai
+      navigate("/dashboard");
+    } catch (err) {
+      alert(err.response?.data?.message || "Invalid Credentials");
+    }
+  };
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        try {
-
-            const res = await axios.post("/auth/login", formData);
-
-            // token store
-            localStorage.setItem("token", res.data.token);
-
-            alert("Login successful");
-
-            console.log(res.data);
-
-        } catch (error) {
-
-            console.log(error.response?.data);
-
-            alert(
-                error.response?.data?.message || "Login failed"
-            );
-        }
-    };
-
-    return (
-        <div>
-
-            <h2>Login</h2>
-
-            <form onSubmit={handleSubmit}>
-
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Enter email"
-                    value={formData.email}
-                    onChange={handleChange}
-                />
-
-                <br /><br />
-
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Enter password"
-                    value={formData.password}
-                    onChange={handleChange}
-                />
-
-                <br /><br />
-
-                <button type="submit">
-                    Login
-                </button>
-
-            </form>
-
-        </div>
-    );
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+      <form onSubmit={handleLogin} className="w-full max-w-md bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+        <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">Login</h2>
+        <input type="email" placeholder="Email" className="w-full p-3 mb-4 border rounded-lg outline-indigo-500" onChange={(e) => setForm({...form, email: e.target.value})} required />
+        <input type="password" placeholder="Password" className="w-full p-3 mb-6 border rounded-lg outline-indigo-500" onChange={(e) => setForm({...form, password: e.target.value})} required />
+        <button className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">Sign In</button>
+      </form>
+    </div>
+  );
 };
 
 export default Login;

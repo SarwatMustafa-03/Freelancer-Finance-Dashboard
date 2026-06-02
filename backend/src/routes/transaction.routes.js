@@ -10,12 +10,15 @@ const {
   getById,
   updateTransaction,
   deleteTransaction,
+  getSummary,
 } = require("../controllers/transaction.controller");
 
 // Protected routes
 router.post("/", auth, createTransaction);
 router.get("/", auth, getTransaction);
+router.get("/summary", auth, getSummary);
 router.get("/:id", auth, getById);
+
 router.put("/:id", auth, updateTransaction);
 router.delete("/:id", auth, deleteTransaction);
 
