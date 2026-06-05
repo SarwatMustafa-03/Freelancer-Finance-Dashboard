@@ -1,4 +1,5 @@
-const mongoose=require("mongoose")
+const mongoose=require("mongoose");
+const { _default, string } = require("zod");
 const userSchema =new mongoose.Schema(
     {
     name: {
@@ -14,6 +15,16 @@ const userSchema =new mongoose.Schema(
       type: String,//bcrypt
       required: true,
     },
+    isVerified:{
+      type:Boolean,
+      _default:false
+    },
+    verificationToken:String,
+    verificationTokenExpires:Date,
+    resetPasswordToken:String,
+    resetPasswordTokenExpires:Date,
+
+
   },
   { timestamps: true } // createdAt, updatedAt
 );

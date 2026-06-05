@@ -1,11 +1,10 @@
-
 {
   "name": "backend",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test":"echo \"Error:no test specified\" && exit 1",
+    "test": "echo \"Error:no test specified\" && exit 1",
     "start": "nodemon src/server.js"
   },
   "keywords": [],
@@ -21,6 +20,8 @@
     "mongodb": "^7.2.0",
     "mongoose": "^9.6.2",
     "morgan": "^1.10.1",
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "regex": "^6.1.0",
+    "zod": "^4.4.3"
   }
 }
