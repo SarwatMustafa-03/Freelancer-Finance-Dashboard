@@ -11,12 +11,10 @@ const errorHandler = require("./middlewares/error.middleware");
 const app = express();
 
 // Middleware
-app.use(
-  cors({
-    origin: true,
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: true,
+  credentials: true,
+}));
 
 app.use(express.json());
 
@@ -28,12 +26,11 @@ app.get("/", (req, res) => {
   res.send("API running...");
 });
 
-// Error Middleware (ALWAYS LAST)
+// Error Middleware
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-// Start server after DB connection
 const startServer = async () => {
   try {
     await connectDB();
@@ -41,6 +38,7 @@ const startServer = async () => {
     app.listen(PORT, () => {
       console.log(`Server is running on ${PORT}`);
     });
+
   } catch (error) {
     console.error("Server startup failed:", error);
     process.exit(1);

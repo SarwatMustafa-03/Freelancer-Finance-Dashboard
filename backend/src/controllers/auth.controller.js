@@ -1,11 +1,9 @@
-
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
-const { registerSchema, loginSchema,} = require("../validation/auth.validation");const User = require("../models/user.model");
-const bcrypt = require("bcrypt");
+const { registerSchema, loginSchema,} = require("../validation/auth.validation");
 
 const register = async (req, res) => {
   try {
@@ -199,7 +197,14 @@ const resetPassword = async (req, res) => {
     const { password } = req.body;
 
     // Validate password
-    registerSchema.shape.password.parse(password);
+    try {
+  registerSchema.shape.password.parse(password);
+} catch (err) {
+  return res.status(400).json({
+    success: false,
+    message: err.issues[0]?.message,
+  });
+}
 
     // Find user with token
     const user = await User.findOne({
@@ -276,11 +281,6 @@ const verifyEmail = async (req, res) => {
   try {
     const { token } = req.params;
 
-    console.log("\n🔐 EMAIL VERIFICATION ATTEMPT:");
-    console.log("========================================");
-    console.log("Token received:", token);
-    console.log("Current time:", new Date().toISOString());
-
     if (!token) {
       return res.status(400).json({
         success: false,
@@ -290,16 +290,8 @@ const verifyEmail = async (req, res) => {
 
     const user = await User.findOne({
       verificationToken: token,
+      verificationTokenExpires: { $gt: Date.now() },
     });
-
-    console.log("User found:", !!user);
-    if (user) {
-      console.log("User email:", user.email);
-      console.log("Token expires at:", user.verificationTokenExpires);
-      console.log("Is expired:", user.verificationTokenExpires < Date.now());
-      console.log("isVerified:", user.isVerified);
-    }
-    console.log("========================================\n");
 
     if (!user) {
       return res.status(400).json({
@@ -308,7 +300,6 @@ const verifyEmail = async (req, res) => {
       });
     }
 
-    // If already verified, return success (idempotent - safe to call multiple times)
     if (user.isVerified) {
       return res.status(200).json({
         success: true,
@@ -316,26 +307,17 @@ const verifyEmail = async (req, res) => {
       });
     }
 
-    // Check if token has expired
-    if (user.verificationTokenExpires < Date.now()) {
-      return res.status(400).json({
-        success: false,
-        message: "Token has expired",
-      });
-    }
-
-    // activate account
     user.isVerified = true;
     user.verificationToken = undefined;
     user.verificationTokenExpires = undefined;
 
     await user.save();
 
-    console.log("✅ Email verified successfully for:", user.email);
     return res.status(200).json({
       success: true,
       message: "Email verified successfully",
     });
+
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -343,7 +325,6 @@ const verifyEmail = async (req, res) => {
     });
   }
 };
-
 
 module.exports = {
   register,
