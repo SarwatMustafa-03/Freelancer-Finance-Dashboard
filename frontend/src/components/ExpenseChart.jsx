@@ -3,28 +3,38 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recha
 
 const ExpenseChart = ({ transactions }) => {
   // Filter only expense and group by category
-  const data = transactions
-    .filter((t) => t.type === 'expense')
-    .reduce((acc, curr) => {
-      const existing = acc.find((item) => item.name.toLowerCase() === curr.category.toLowerCase());
-      if (existing) {
-        existing.amount += Number(curr.amount);
-      } else {
-        acc.push({ name: curr.category, amount: Number(curr.amount) });
-      }
-      return acc;
-    }, []);
+  const expenseData = transactions
+  .filter((t) => t.type === "expense")
+  .reduce((acc, curr) => {
+    const existing = acc.find(
+      (item) => item.name.toLowerCase() === curr.category.toLowerCase()
+    );
+
+    if (existing) {
+      existing.amount += Number(curr.amount);
+    } else {
+      acc.push({
+        name: curr.category,
+        amount: Number(curr.amount),
+      });
+    }
+
+    return acc;
+  }, []);
+
+const data =
+  expenseData.length > 0
+    ? expenseData
+    : [
+        { name: "Food", amount: 30 },
+        { name: "Transport", amount: 20 },
+        { name: "Bills", amount: 50 },
+      ];
 
   // Premium tailwind-based soft color palette for categories
   const COLORS = ['#ef4444', '#f97316', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4'];
 
-  if (data.length === 0) {
-    return (
-      <div className="h-64 flex items-center justify-center text-sm text-gray-400 border border-dashed rounded-xl bg-white">
-        No expense data available to display charts
-      </div>
-    );
-  }
+  
 
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">

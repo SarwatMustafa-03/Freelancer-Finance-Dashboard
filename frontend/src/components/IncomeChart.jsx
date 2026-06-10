@@ -3,18 +3,33 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 
 const IncomeChart = ({ transactions }) => {
   // Filter only income and group by category
-  const data = transactions
-    .filter((t) => t.type === 'income')
-    .reduce((acc, curr) => {
-      const existing = acc.find((item) => item.name.toLowerCase() === curr.category.toLowerCase());
-      if (existing) {
-        existing.amount += Number(curr.amount);
-      } else {
-        acc.push({ name: curr.category, amount: Number(curr.amount) });
-      }
-      return acc;
-    }, []);
+  const incomeData = transactions
+  .filter((t) => t.type === "income")
+  .reduce((acc, curr) => {
+    const existing = acc.find(
+      (item) => item.name.toLowerCase() === curr.category.toLowerCase()
+    );
 
+    if (existing) {
+      existing.amount += Number(curr.amount);
+    } else {
+      acc.push({
+        name: curr.category,
+        amount: Number(curr.amount),
+      });
+    }
+
+    return acc;
+  }, []);
+
+const data =
+  incomeData.length > 0
+    ? incomeData
+    : [
+        { name: "Salary", amount: 50 },
+        { name: "Freelance", amount: 30 },
+        { name: "Bonus", amount: 20 },
+      ];
   if (data.length === 0) {
     return (
       <div className="h-64 flex items-center justify-center text-sm text-gray-400 border border-dashed rounded-xl bg-white">
@@ -34,7 +49,7 @@ const IncomeChart = ({ transactions }) => {
             <YAxis stroke="#9ca3af" fontSize={12} tickLine={false} />
             <Tooltip
               contentStyle={{ backgroundColor: '#fff', borderColor: '#e5e7eb', borderRadius: '8px' }}
-              cursor={{ fill: '#f3f4f6' }}
+              cursor={{ fill: '#f3f4f671' }}
             />
             <Bar dataKey="amount" fill="#10b981" radius={[4, 4, 0, 0]} barSize={30} />
           </BarChart>

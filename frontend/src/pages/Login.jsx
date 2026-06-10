@@ -1,6 +1,8 @@
 import { useState } from "react";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -13,7 +15,7 @@ const Login = () => {
       localStorage.setItem("token", data.token); // Token save karna zaroori hai
       navigate("/dashboard");
     } catch (err) {
-      alert(err.response?.data?.message || "Invalid Credentials");
+      toast.error(err.response?.data?.message || "Invalid Credentials");
     }
   };
 

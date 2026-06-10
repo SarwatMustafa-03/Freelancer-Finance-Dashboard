@@ -1,6 +1,9 @@
 import { useState } from "react";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
+
 
 const Register = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -9,9 +12,9 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await API.post("/auth/register", form);
-      alert("Registration Successful! Please Login.");
-      navigate("/login");
+    const { data } = await API.post("/auth/register", form);
+    toast.success("Registration successful. Please verify your email.");
+navigate("/login");
     } catch (err) {
       alert(err.response?.data?.message || "Registration failed");
     }

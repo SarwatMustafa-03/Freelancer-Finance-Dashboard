@@ -6,7 +6,7 @@ const protect = require("../middlewares/auth.middleware");
 router.post("/register",register)//register controller call krty
 router.post("/login",login)
 router.get("/profile",protect,getProfile)
-router.get("/verify/:token",verifyEmail)
+router.get("/verify-email/:token", verifyEmail);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);
 

@@ -46,7 +46,11 @@ const register = async (req, res) => {
     });
 
     // Verification link
-    const verifyURL = `${process.env.CLIENT_URL}/verify/${verificationToken}`;
+    
+    const verifyURL = `${process.env.BACKEND_URL}/api/auth/verify-email/${verificationToken}`;
+      
+    console.log("BACKEND_URL:", process.env.BACKEND_URL);
+   console.log("VERIFY URL:", verifyURL);
 
     // Send email
     await sendEmail({
